@@ -66,7 +66,7 @@ message("Done configuring argparse.")
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-add_library(ramulator SHARED)
+add_library(ramulator STATIC)
 set_target_properties(ramulator PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY  ${PROJECT_SOURCE_DIR}
 )
@@ -75,6 +75,30 @@ target_link_libraries(
   PUBLIC yaml-cpp
   PUBLIC spdlog
 )
+
+install(TARGETS ramulator
+        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install (FILES
+         src/frontend/frontend.h
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/frontend)
+install (FILES
+         src/base/config.h
+         src/base/logging.h
+         src/base/stats.h
+         src/base/type.h
+         src/base/serialization.h
+         src/base/exception.h
+         src/base/param.h
+         src/base/debug.h
+         src/base/request.h
+         src/base/utils.h
+         src/base/base.h
+         src/base/factory.h
+         src/base/clocked.h
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/base)
+install (FILES
+         src/memory_system/memory_system.h
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/memory_system)
 
 add_executable(ramulator-exe)
 target_link_libraries(
