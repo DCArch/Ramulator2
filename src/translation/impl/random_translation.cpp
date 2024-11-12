@@ -48,8 +48,6 @@ class RandomTranslation : public ITranslation, public Implementation {
 
       m_frontend = cast_parent<IFrontEnd>();
       m_translation.resize(m_frontend->get_num_cores());
-
-      m_logger = Logging::create_logger("RandomTranslation");
     };
 
     bool translate(Request& req) override {
@@ -67,7 +65,7 @@ class RandomTranslation : public ITranslation, public Implementation {
             ppn_to_replace = m_allocator_rng() % m_num_pages;
           }
           core_translation[vpn] = ppn_to_replace;
-          m_logger->warn("Swapping out PPN {} for Addr {}, VPN {}.", ppn_to_replace, req.addr, vpn);
+          fmt::print("Swapping out PPN {} for Addr {}, VPN {}.", ppn_to_replace, req.addr, vpn);
         } else {
           // We have available physical pages. Randomly assign one.
           Addr_t ppn_to_assign = m_allocator_rng() % m_num_pages;
@@ -86,7 +84,7 @@ class RandomTranslation : public ITranslation, public Implementation {
       // We either found an existing translation or have assigned a new page
       Addr_t p_addr = (core_translation[vpn] << m_offsetbits) | (req.addr & ((1 << m_offsetbits) - 1));
 
-      DEBUG_LOG(DTRANSLATE, m_logger, "Translated Addr {}, VPN {} to Addr {}, PPN {}.", req.addr, vpn, p_addr, core_translation[vpn]);
+      DEBUG_LOG(DTRANSLATE, "Translated Addr {}, VPN {} to Addr {}, PPN {}.", req.addr, vpn, p_addr, core_translation[vpn]);
 
       req.addr = p_addr;
       return true;

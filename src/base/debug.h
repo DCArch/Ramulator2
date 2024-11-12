@@ -4,8 +4,7 @@
 #include <vector>
 #include <string>
 #include <type_traits>
-
-#include "base/logging.h"
+#include <fmt/core.h>
 
 namespace Ramulator {
 
@@ -29,13 +28,13 @@ inline constexpr bool is_debug_enabled = std::false_type::value;
   template <> \
   inline constexpr bool Debug::is_debug_enabled<Debug::flagT> = std::true_type::value;
 
-#define DEBUG_LOG(flagT, logger, msg, ...) \
+#define DEBUG_LOG(flagT, msg, ...) \
   if constexpr (Debug::is_debug_enabled<Debug::flagT>) { \
-    logger->debug(msg, __VA_ARGS__); \
+    fmt::print(msg, __VA_ARGS__); \
   }
 #else
 #define ENABLE_DEBUG_FLAG(flagT)
-#define DEBUG_LOG(flagT, logger, msg, ...)
+#define DEBUG_LOG(flagT, msg, ...)
 #endif
 }        // namespace Debug
 

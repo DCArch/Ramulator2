@@ -8,7 +8,7 @@
 namespace Ramulator {
 
 bool Factory::register_interface(std::string ifce_name, std::string ifce_desc) {
-  DEBUG_LOG(DFACTORY, Logging::get("Base"), "Registering interface {}...", ifce_name)
+  DEBUG_LOG(DFACTORY, "Registering interface {}...", ifce_name)
 
   if (auto it = m_registry.find(ifce_name); it == m_registry.end()) {
     m_registry[ifce_name] = {ifce_name, ifce_desc};
@@ -33,7 +33,7 @@ bool Factory::query_interface(std::string ifce_name) {
 
 
 bool Factory::register_implementation(std::string ifce_name, std::string impl_name, std::string impl_desc, const Constructor_t& cstr) {
-  DEBUG_LOG(DFACTORY, Logging::get("Base"), "Registering implementation {} to interface {}...", impl_name, ifce_name)
+  DEBUG_LOG(DFACTORY, "Registering implementation {} to interface {}...", impl_name, ifce_name)
 
   // First we search for the interface metadata.
   if (auto ifce_it = m_registry.find(ifce_name); ifce_it != m_registry.end()) {
@@ -63,7 +63,7 @@ bool Factory::register_implementation(std::string ifce_name, std::string impl_na
 
 
 Implementation* Factory::create_implementation(std::string ifce_name, std::string impl_name, const YAML::Node& config, Implementation* parent) {
-  DEBUG_LOG(DFACTORY, Logging::get("Base"), "Creating implementation {} of interface {}...", impl_name, ifce_name)
+  DEBUG_LOG(DFACTORY, "Creating implementation {} of interface {}...", impl_name, ifce_name)
 
   if (const auto ifce_it = m_registry.find(ifce_name); ifce_it != m_registry.end()) {
     const auto& [_ifce_name, ifce_info] = *ifce_it;
@@ -89,7 +89,7 @@ Implementation* Factory::create_implementation(std::string ifce_name, std::strin
 }
 
 Implementation* Factory::create_implementation(std::string ifce_name, const YAML::Node& config, Implementation* parent) {
-  DEBUG_LOG(DFACTORY, Logging::get("Base"), "Creating an implementation of interface {}...", ifce_name)
+  DEBUG_LOG(DFACTORY, "Creating an implementation of interface {}...", ifce_name)
 
   if (!config[ifce_name]) {
     throw InitializationError("Interface {} not found in the configuration!", ifce_name); 

@@ -1,3 +1,5 @@
+#include <fmt/core.h>
+
 #include "dram_controller/bh_controller.h"
 #include "memory_system/memory_system.h"
 #include "frontend/frontend.h"
@@ -13,7 +15,6 @@ class BHDRAMController final : public IBHDRAMController, public Implementation {
   RAMULATOR_REGISTER_IMPLEMENTATION(IBHDRAMController, BHDRAMController, "BHDRAMController", "BHammer DRAM controller.");
   
   private:
-    Logger_t m_logger;
     std::deque<Request> pending;          // A queue for read requests that are about to finish (callback after RL)
     BHO3LLC* m_llc;
 
@@ -51,7 +52,6 @@ class BHDRAMController final : public IBHDRAMController, public Implementation {
       m_scheduler = create_child_ifce<IBHScheduler>();
       m_refresh = create_child_ifce<IRefreshManager>();
       m_rowpolicy = create_child_ifce<IRowPolicy>();
-      m_logger = Logging::create_logger("DBHCTRL");
 
       if (m_config["plugins"]) {
         YAML::Node plugin_configs = m_config["plugins"];

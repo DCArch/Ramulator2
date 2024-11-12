@@ -8,7 +8,7 @@
 #include <functional>
 #include <iostream>
 
-#include <spdlog/spdlog.h>
+#include <fmt/core.h>
 #include <yaml-cpp/yaml.h>
 
 #include "base/type.h"
@@ -16,7 +16,6 @@
 #include "base/clocked.h"
 #include "base/param.h"
 #include "base/exception.h"
-#include "base/logging.h"
 #include "base/debug.h"
 #include "base/request.h"
 #include "base/utils.h"
@@ -60,8 +59,6 @@ class Implementation {
 
     Params m_params;          // The parameters of the implementation
     Stats m_stats;            // All statistics of the implementation are held here.
-    Logger_t m_logger;        // Pointer to an pdlog logger.
-
 
   public:
     Implementation(const YAML::Node& config, std::string ifce_name, std::string name, std::string desc, Implementation* parent):

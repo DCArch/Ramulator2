@@ -1,20 +1,20 @@
 #include <iostream>
+#include <cassert>
 #include "frontend/impl/processor/simpleO3/llc.h"
 
 namespace Ramulator {
 
 SimpleO3LLC::SimpleO3LLC(int latency, int size_bytes, int linesize_bytes, int associativity, int num_mshrs):
 m_latency(latency), m_size_bytes(size_bytes), m_linesize_bytes(linesize_bytes), m_associativity(associativity), m_num_mshrs(num_mshrs) {
-  m_logger = Logging::create_logger("SimpleO3LLC");
 
   m_set_size = m_size_bytes / (m_linesize_bytes * m_associativity);
   m_index_mask = m_set_size - 1;
   m_index_offset = calc_log2(m_linesize_bytes);
   m_tag_offset = calc_log2(m_set_size) + m_index_offset;
 
-  DEBUG_LOG(DSIMPLEO3LLC, m_logger, "Index mask: {0:x}", m_index_mask);
-  DEBUG_LOG(DSIMPLEO3LLC, m_logger, "Index offset: {}",  m_index_offset);
-  DEBUG_LOG(DSIMPLEO3LLC, m_logger, "Tag offset: {}",    m_tag_offset);
+  DEBUG_LOG(DSIMPLEO3LLC, "Index mask: {0:x}", m_index_mask);
+  DEBUG_LOG(DSIMPLEO3LLC, "Index offset: {}",  m_index_offset);
+  DEBUG_LOG(DSIMPLEO3LLC, "Tag offset: {}",    m_tag_offset);
 };
 
 void SimpleO3LLC::tick() {
@@ -63,7 +63,7 @@ bool SimpleO3LLC::send(Request req) {
 
   if (auto line_it = check_set_hit(set, req.addr); line_it != set.end()) {
     // Hit in the set
-    DEBUG_LOG(DSIMPLEO3LLC, m_logger, 
+    DEBUG_LOG(DSIMPLEO3LLC, 
     "[Clk={}] Request Source: {}, Type: {}, Addr: {}, Index: {}, Tag: {}. Hit, will finish at Clk={}", 
     m_clk, req.source_id, req.type_id, req.addr, get_index(req.addr), get_tag(req.addr), m_clk, m_clk + m_latency
     );
@@ -77,7 +77,7 @@ bool SimpleO3LLC::send(Request req) {
     return true;
   } else {
     // Miss in the set
-    DEBUG_LOG(DSIMPLEO3LLC, m_logger, 
+    DEBUG_LOG(DSIMPLEO3LLC, 
     "[Clk={}] Request Source: {}, Type: {}, Addr: {}, Index: {}, Tag: {}. Miss.", 
     m_clk, req.source_id, req.type_id, req.addr, get_index(req.addr), get_tag(req.addr), m_clk, m_clk + m_latency
     );
@@ -96,7 +96,7 @@ bool SimpleO3LLC::send(Request req) {
     // MSHR lookup
     auto mshr_it = check_mshr_hit(req.addr);
     if (mshr_it != m_mshrs.end()) {
-      DEBUG_LOG(DSIMPLEO3LLC, m_logger,  "MSHR Hit.", m_clk);
+      DEBUG_LOG(DSIMPLEO3LLC, "MSHR Hit.", m_clk);
       // Add new req to MSHR_requests
       m_receive_requests[mshr_it->first].push_back(req);
 
@@ -107,7 +107,7 @@ bool SimpleO3LLC::send(Request req) {
     // MSHR miss
     // Check if there is available MSHR entry
     if (m_mshrs.size() == m_num_mshrs) {
-      DEBUG_LOG(DSIMPLEO3LLC, m_logger,  "No MSHR entry available.", m_clk);
+      DEBUG_LOG(DSIMPLEO3LLC, "No MSHR entry available.", m_clk);
       s_llc_mshr_unavailable++;
       return false;
     }
@@ -124,7 +124,7 @@ bool SimpleO3LLC::send(Request req) {
       }
     }
     if (!line_available) {
-      DEBUG_LOG(DSIMPLEO3LLC, m_logger,  "No cache line available in the set.", m_clk);
+      DEBUG_LOG(DSIMPLEO3LLC, "No cache line available in the set.", m_clk);
       return false;
     }
 
@@ -156,7 +156,7 @@ void SimpleO3LLC::receive(Request& req) {
     [&req, this](MSHREntry_t mshr_entry) { return (align(mshr_entry.first) == align(req.addr)); }
   );
 
-  DEBUG_LOG(DSIMPLEO3LLC, m_logger, "[Clk={}] Request {} received.", m_clk, req.addr);
+  DEBUG_LOG(DSIMPLEO3LLC, "[Clk={}] Request {} received.", m_clk, req.addr);
 
   if (it != m_mshrs.end()) {
     it->second->ready = true;
@@ -205,7 +205,7 @@ bool SimpleO3LLC::need_eviction(const CacheSet_t& set, Addr_t addr) {
 }
 
 void SimpleO3LLC::evict_line(CacheSet_t& set, CacheSet_t::iterator victim_it) {
-  DEBUG_LOG(DSIMPLEO3LLC, m_logger,  "Evicting {}.", victim_it->addr);
+  DEBUG_LOG(DSIMPLEO3LLC, "Evicting {}.", victim_it->addr);
   s_llc_eviction++;
 
   // Generate writeback request if victim line is dirty
@@ -213,7 +213,7 @@ void SimpleO3LLC::evict_line(CacheSet_t& set, CacheSet_t::iterator victim_it) {
     Request writeback_req(victim_it->addr, Request::Type::Write);
     m_miss_list.push_back(std::make_pair(m_clk + m_latency, writeback_req));
 
-    DEBUG_LOG(DSIMPLEO3LLC, m_logger,  "Writeback Request will be issued at Clk={}.", m_clk + m_latency);
+    DEBUG_LOG(DSIMPLEO3LLC, "Writeback Request will be issued at Clk={}.", m_clk + m_latency);
   }
 
   set.erase(victim_it);

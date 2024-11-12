@@ -9,7 +9,7 @@
 #include <ranges>
 #include <stdexcept>
 
-#include <spdlog/spdlog.h>
+#include <fmt/core.h>
 
 namespace Ramulator {
 
@@ -57,7 +57,7 @@ struct TimingConsEntry {
   TimingConsEntry(int cmd, int val, int window = 1, bool sibling = false):
   cmd(cmd), val(val), window(window), sibling(sibling) {
     if (this->window < 0) {
-      spdlog::warn("[DRAM Spec] Timing constraint value smaller than 0!");
+      fmt::print("[DRAM Spec] Timing constraint value smaller than 0!");
       this->window = 0;
     }
   };

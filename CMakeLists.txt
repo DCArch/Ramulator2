@@ -41,16 +41,16 @@ FetchContent_MakeAvailable(yaml-cpp)
 include_directories(${yaml-cpp_SOURCE_DIR}/include)
 message("Done configuring yaml-cpp.")
 
-message("Configuring spdlog...")
+message("Configuring fmt...")
 FetchContent_Declare(
-  spdlog                             
-  GIT_REPOSITORY https://github.com/gabime/spdlog.git
-  GIT_TAG        v1.11.0     
-  SOURCE_DIR     ${CMAKE_SOURCE_DIR}/ext/spdlog
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        10.2.1    
+  SOURCE_DIR     ${CMAKE_SOURCE_DIR}/ext/fmt
 )
-FetchContent_MakeAvailable(spdlog)
-include_directories(${spdlog_SOURCE_DIR}/include)
-message("Done configuring spdlog.")
+FetchContent_MakeAvailable(fmt)
+include_directories(${fmt_SOURCE_DIR}/include)
+message("Done configuring fmt.")
 
 message("Configuring argparse...")
 FetchContent_Declare(
@@ -73,7 +73,7 @@ set_target_properties(ramulator PROPERTIES
 target_link_libraries(
   ramulator 
   PUBLIC yaml-cpp
-  PUBLIC spdlog
+  PUBLIC fmt
 )
 
 install(TARGETS ramulator
@@ -83,7 +83,6 @@ install (FILES
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/frontend)
 install (FILES
          src/base/config.h
-         src/base/logging.h
          src/base/stats.h
          src/base/type.h
          src/base/serialization.h

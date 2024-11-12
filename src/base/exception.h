@@ -4,8 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-
-#include <spdlog/spdlog.h>
+#include <fmt/core.h>
 
 namespace Ramulator {
 

@@ -6,11 +6,9 @@
 #include <unordered_map>
 #include <functional>
 
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #include "base/type.h"
-#include "base/logging.h"
 #include "base/debug.h"
 
 

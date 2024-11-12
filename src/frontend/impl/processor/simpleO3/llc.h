@@ -46,9 +46,6 @@ class SimpleO3LLC : public Clocked<SimpleO3LLC> {
 
     IMemorySystem* m_memory_system;
 
-    Logger_t m_logger;
-
-
   public:
     int m_latency;
 

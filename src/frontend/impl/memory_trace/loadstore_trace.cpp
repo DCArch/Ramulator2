@@ -1,6 +1,7 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
+#include <fmt/core.h>
 
 #include "frontend/frontend.h"
 #include "base/exception.h"
@@ -24,17 +25,14 @@ class LoadStoreTrace : public IFrontEnd, public Implementation {
 
     size_t m_trace_count = 0;
 
-    Logger_t m_logger;
-
   public:
     void init() override {
       std::string trace_path_str = param<std::string>("path").desc("Path to the load store trace file.").required();
       m_clock_ratio = param<uint>("clock_ratio").required();
 
-      m_logger = Logging::create_logger("LoadStoreTrace");
-      m_logger->info("Loading trace file {} ...", trace_path_str);
+      fmt::print("LoadStoreTrace: Loading trace file {} ...", trace_path_str);
       init_trace(trace_path_str);
-      m_logger->info("Loaded {} lines.", m_trace.size());
+      fmt::print("LoadStoreTrace: Loaded {} lines.", m_trace.size());
     };
 
 

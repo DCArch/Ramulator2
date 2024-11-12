@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <spdlog/spdlog.h>
 
 #include "base/exception.h"
 #include "base/utils.h"

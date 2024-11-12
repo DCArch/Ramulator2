@@ -51,8 +51,6 @@ class BHO3LLC : public Clocked<BHO3LLC> {
 
     IMemorySystem* m_memory_system;
 
-    Logger_t m_logger;
-
     // BH Changes Begin
     std::vector<int> m_allocated_mshrs;
     std::vector<int> m_blacklist_max_mshrs;

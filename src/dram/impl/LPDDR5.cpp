@@ -1,3 +1,5 @@
+#include <fmt/core.h>
+
 #include "dram/dram.h"
 #include "dram/lambdas.h"
 
@@ -472,7 +474,7 @@ class LPDDR5 : public IDRAM, public Implementation {
             }
           }    
           default: {
-            spdlog::error("[Preq::Bank] Invalid bank state for an RD/WR command!");
+            fmt::print("[Preq::Bank] Invalid bank state for an RD/WR command!");
             std::exit(-1);      
           } 
         }
@@ -494,7 +496,7 @@ class LPDDR5 : public IDRAM, public Implementation {
             }
           }    
           default: {
-            spdlog::error("[Preq::Bank] Invalid bank state for an RD/WR command!");
+            fmt::print("[Preq::Bank] Invalid bank state for an RD/WR command!");
             std::exit(-1);      
           } 
         }

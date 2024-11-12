@@ -60,8 +60,6 @@ class SimpleO3 final : public IFrontEnd, public Implementation {
         m_cores.push_back(core);
       }
 
-      m_logger = Logging::create_logger("SimpleO3");
-
       // Register the stats
       register_stat(m_num_expected_insts).name("num_expected_insts");
       register_stat(m_llc->s_llc_eviction).name("llc_eviction");
@@ -82,7 +80,7 @@ class SimpleO3 final : public IFrontEnd, public Implementation {
       m_clk++;
 
       if(m_clk % 10000000 == 0) {
-        m_logger->info("Processor Heartbeat {} cycles.", m_clk);
+          fmt::print("Processor Heartbeat {} cycles.", m_clk);
       }
 
       m_llc->tick();

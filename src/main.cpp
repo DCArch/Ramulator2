@@ -1,8 +1,7 @@
 #include <iostream>
 
 #include <argparse/argparse.hpp>
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
+#include <fmt/core.h>
 
 #include "base/base.h"
 #include "base/config.h"
@@ -25,7 +24,7 @@ int main(int argc, char* argv[]) {
     program.parse_args(argc, argv);
   }
   catch (const std::runtime_error& err) {
-    spdlog::error(err.what());
+    fmt::print(err.what());
     std::cerr << program;
     std::exit(1);
   }
@@ -56,17 +55,17 @@ int main(int argc, char* argv[]) {
 
   // Some sanity check of the inputs
   if (use_dumped_yaml && use_yaml_file) {
-    spdlog::error("Dumped config and loaded config cannot be used together!");
+    fmt::print("Dumped config and loaded config cannot be used together!");
     std::cerr << program;
     std::exit(1);
   } else if (!(use_dumped_yaml || use_yaml_file)) {
-    spdlog::error("No configuration specified!");
+    fmt::print("No configuration specified!");
     std::cerr << program;
     std::exit(1);
   }
 
   if (use_dumped_yaml && has_param_override) {
-    spdlog::warn("Using dumped configuration. Parameter overrides with -p/--param will be ignored!");
+    fmt::print("Using dumped configuration. Parameter overrides with -p/--param will be ignored!");
   }
   
   // Parse the configurations

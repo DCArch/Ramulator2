@@ -14,6 +14,7 @@
 #include <array>
 #include <vector>
 #include <utility>
+#include <fmt/core.h>
 
 #include "blockhammer.h"
 #include "blockhammer_util.h"
@@ -23,8 +24,6 @@ namespace Ramulator {
 
 DECLARE_DEBUG_FLAG(DBHPLG);
 ENABLE_DEBUG_FLAG(DBHPLG);
-
-Logger_t m_logger;
 
 class BlockHammer : public IControllerPlugin, public Implementation, public IBlockHammer {
   RAMULATOR_REGISTER_IMPLEMENTATION(IControllerPlugin, BlockHammer, "BlockHammer", "BlockHammer")
@@ -115,8 +114,6 @@ class BlockHammer : public IControllerPlugin, public Implementation, public IBlo
                              m_dram->get_level_size("bank") : 
                              m_dram->get_level_size("bankgroup") * m_dram->get_level_size("bank");
       m_num_rows_per_bank = m_dram->get_level_size("row");
-
-      m_logger = Logging::create_logger("DBHPLG");
 
       m_num_mshr_per_core = m_llc->get_mshrs_per_core();
 

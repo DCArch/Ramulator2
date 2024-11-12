@@ -1,7 +1,7 @@
 #ifndef RAMULATOR_DRAM_LAMBDAS_ROWHIT_H
 #define RAMULATOR_DRAM_LAMBDAS_ROWHIT_H
 
-#include <spdlog/spdlog.h>
+#include <fmt/core.h>
 
 namespace Ramulator {
 namespace Lambdas {
@@ -20,7 +20,7 @@ namespace Bank {
         }
       case T::m_states["Refreshing"]: return false;
       default: {
-        spdlog::error("[RowHit::Bank] Invalid bank state for an RD/WR command!");
+        fmt::print("[RowHit::Bank] Invalid bank state for an RD/WR command!");
         std::exit(-1);      
       }
     }

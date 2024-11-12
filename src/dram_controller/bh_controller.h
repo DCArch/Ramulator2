@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <deque>
+#include <climits>
 
-#include <spdlog/spdlog.h>
 #include <yaml-cpp/yaml.h>
 
 #include "base/base.h"

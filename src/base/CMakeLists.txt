@@ -6,7 +6,6 @@ target_sources(
   factory.h   factory.cpp
   type.h
   exception.h
-  logging.h   logging.cpp
   debug.h
   param.h 
   utils.h     utils.cpp
