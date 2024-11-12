@@ -95,6 +95,9 @@ install (FILES
          src/base/factory.h
          src/base/clocked.h
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/base)
+install (DIRECTORY
+         ${yaml-cpp_SOURCE_DIR}/include/yaml-cpp
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/)
 install (FILES
          src/memory_system/memory_system.h
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/memory_system)
