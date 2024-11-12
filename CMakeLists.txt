@@ -33,8 +33,7 @@ option(YAML_CPP_BUILD_TOOLS "Enable parse tools" OFF)
 option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp as a shared library" OFF)
 FetchContent_Declare(
   yaml-cpp                             
-  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-  GIT_TAG        yaml-cpp-0.7.0                        
+  GIT_REPOSITORY https://github.com/DCArch/yaml-cpp.git
   SOURCE_DIR     ${CMAKE_SOURCE_DIR}/ext/yaml-cpp
 )
 FetchContent_MakeAvailable(yaml-cpp)
@@ -70,6 +69,7 @@ add_library(ramulator STATIC)
 set_target_properties(ramulator PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY  ${PROJECT_SOURCE_DIR}
 )
+target_compile_options(ramulator PRIVATE -fPIC -DFMT_HEADER_ONLY=1 -fabi-version=2 -D_GLIBCXX_USE_CXX11_ABI=0)
 target_link_libraries(
   ramulator 
   PUBLIC yaml-cpp
@@ -100,6 +100,7 @@ install (FILES
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/memory_system)
 
 add_executable(ramulator-exe)
+target_compile_options(ramulator-exe PRIVATE -DFMT_HEADER_ONLY=1 -fabi-version=2 -D_GLIBCXX_USE_CXX11_ABI=0)
 target_link_libraries(
   ramulator-exe 
   # PRIVATE -Wl,--whole-archive ramulator -Wl,--no-whole-archive 

@@ -8,6 +8,8 @@ target_sources(
   impl/random_translation.cpp
 )
 
+target_compile_options(ramulator-translation PRIVATE -fPIC -DFMT_HEADER_ONLY=1 -fabi-version=2 -D_GLIBCXX_USE_CXX11_ABI=0)
+
 target_link_libraries(
   ramulator
   PRIVATE
