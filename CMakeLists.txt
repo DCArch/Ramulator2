@@ -51,16 +51,6 @@ FetchContent_MakeAvailable(fmt)
 include_directories(${fmt_SOURCE_DIR}/include)
 message("Done configuring fmt.")
 
-message("Configuring argparse...")
-FetchContent_Declare(
-    argparse
-    GIT_REPOSITORY https://github.com/p-ranav/argparse.git
-    GIT_TAG        v2.9     
-    SOURCE_DIR     ${CMAKE_SOURCE_DIR}/ext/argparse
-)
-FetchContent_MakeAvailable(argparse)
-include_directories(${argparse_SOURCE_DIR}/include)
-message("Done configuring argparse.")
 ##################################
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
@@ -73,11 +63,13 @@ target_compile_options(ramulator PRIVATE -fPIC -DFMT_HEADER_ONLY=1 -fabi-version
 target_link_libraries(
   ramulator 
   PUBLIC yaml-cpp
-  PUBLIC fmt
 )
 
 install(TARGETS ramulator
         LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install (FILES
+         ${CMAKE_BINARY_DIR}/_deps/yaml-cpp-build/libyaml-cpp.a
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 install (FILES
          src/frontend/frontend.h
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/frontend)
@@ -101,20 +93,5 @@ install (DIRECTORY
 install (FILES
          src/memory_system/memory_system.h
          DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ramulator/memory_system)
-
-add_executable(ramulator-exe)
-target_compile_options(ramulator-exe PRIVATE -DFMT_HEADER_ONLY=1 -fabi-version=2 -D_GLIBCXX_USE_CXX11_ABI=0)
-target_link_libraries(
-  ramulator-exe 
-  # PRIVATE -Wl,--whole-archive ramulator -Wl,--no-whole-archive 
-  PRIVATE ramulator
-  PRIVATE argparse
-)
-
-set_target_properties(
-  ramulator-exe
-  PROPERTIES 
-  OUTPUT_NAME ramulator2
-)
 
 add_subdirectory(src)
